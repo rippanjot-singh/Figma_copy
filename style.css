@@ -1,0 +1,384 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: #3a3a3a;
+    font-family: sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+main::-webkit-scrollbar {
+    display: none;
+}
+
+.leftnav {
+    position: absolute;
+    z-index: 999;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    height: 100vh;
+    background-color: #1e1e1e;
+    padding-inline: 20px;
+}
+
+.leftnav-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftnav-top i {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1e1e1e;
+}
+
+.layerboard {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.layer {
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.layer:hover {
+    background-color: #ffffff18;
+}
+
+.layer p {
+    font-weight: 100;
+    font-size: 0.8rem;
+}
+
+.updown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.updown i {
+    transition: all 0.1s ease-in-out;
+    color: #ffffffc5;
+}
+
+.updown i:hover {
+    background-color: rgb(73, 73, 73);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.canvas {
+    position: relative;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.canvas-inner {
+    width: 5000px;
+    height: 2000px;
+    background-color: #0a0a0a;
+    background-image: radial-gradient(circle, #222 1px, transparent 1px);
+    background-size: 40px 40px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid #1a1a1a;
+}
+
+.rightnav {
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 100vh;
+    background-color: #1e1e1e;
+    padding-inline: 20px;
+}
+
+.rightnav-top {
+    padding-inline: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.rightnav-top i {
+    transform: rotate(180deg);
+}
+
+.eye-open {
+    font-size: 12px;
+}
+
+.toolbar {
+    padding-inline: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+    background-color: #3a3a3a;
+    display: flex;
+    gap: 15px;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.toolbar select {
+    width: 60px;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: #3a3a3a;
+    color: #fff;
+}
+
+.toolbar div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    color: #fff;
+}
+
+.dots {
+    display: none;
+    z-index: 1000;
+}
+
+.corner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.dots {
+    pointer-events: all;
+    cursor: nwse-resize;
+}
+
+.top-right, .bottom-left {
+    cursor: nesw-resize;
+}
+
+.selected .dots, .shape:hover .dots {
+    display: block;
+}
+
+.selected {
+    outline: 2px solid #21afd3 !important;
+    outline-offset: 2px;
+}
+
+.dots {
+    z-index: 9999;
+}
+
+.canvas p {
+    user-select: none;
+}
+
+
+.leftnav, .rightnav {
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+}
+
+.leftnav.collapsed, .rightnav.collapsed {
+    width: 50px;
+    padding-inline: 5px;
+}
+
+.leftnav.collapsed .layerboard,
+.leftnav.collapsed #layers-container,
+.leftnav.collapsed .layer,
+.rightnav.collapsed .properties-panel,
+.rightnav.collapsed .panel-title {
+    display: none;
+}
+
+.leftnav.collapsed .leftnav-top,
+.rightnav.collapsed .rightnav-top {
+    justify-content: center;
+    width: 100%;
+}
+
+.leftnav.collapsed .leftnav-top i,
+.rightnav.collapsed .rightnav-top i {
+    transform: rotate(180deg);
+}
+
+.properties-panel {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.panel-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.prop-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.prop-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.prop-item label, .prop-section label {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.prop-item input, .prop-section input, .prop-section textarea {
+    width: 100%;
+    background-color: #2b2b2b;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 6px 8px;
+    color: #eee;
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.prop-item input:focus, .prop-section input:focus, .prop-section textarea:focus {
+    border-color: #21afd3;
+}
+
+.prop-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.color-picker-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+input[type="color"] {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
+    font-family: inherit;
+}
+
+#layers-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    padding-bottom: 20px;
+}
+
+.active-layer {
+    background-color: #21afd344;
+    border: 1px solid #21afd3;
+}
+
+.layer {
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.updown i {
+    font-size: 1.1rem;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.updown i:hover {
+    background-color: #ffffff33;
+    color: #fff;
+}
+
+.export {
+    position: absolute;
+    z-index: 999;
+    top: 40px;
+    left: 50%;
+    border: 1px solid #ffffff;
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    gap: 10px;
+}
+.export p{
+    padding: 8px;
+    background-color: #3a3a3a;
+    border-radius: 4px;
+    border: 1px solid #3a3a3a;
+}

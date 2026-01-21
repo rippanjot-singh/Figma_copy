@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Copy</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <div class="leftnav">
+            <div class="leftnav-top">
+                <p class="layerboard">
+                    Layer Board
+                </p>
+                <i class="ri-sidebar-fold-line"></i>
+            </div>
+            <div id="layers-container">
+            </div>
+        </div>
+        <div class="export">
+            <p>JSON</p>
+            <p>HTML</p>
+        </div>
+        <div class="canvas">
+            <div class="canvas-inner"></div>
+        </div>
+        <div class="toolbar">
+            <select name="tool" id="tool">
+                <option value="" disabled selected hidden>▣</option>
+                <option value="rectangle">
+                    ▭
+                </option>
+                <option value="circle">
+                    ◯
+                </option>
+            </select>
+            <div class="text">
+                <i class="ri-text"></i>
+            </div>
+            <div class="image" id="imageBtn">
+                <i class="ri-file-image-line"></i>
+            </div>
+
+            <input type="file" id="imageInput" accept="image/*" hidden />
+
+        </div>
+        <div class="rightnav">
+            <div class="rightnav-top">
+                <i class="ri-sidebar-fold-line"></i>
+            </div>
+            <div class="properties-panel">
+                <!-- <p class="panel-title">Properties</p> -->
+                
+                <div class="prop-group">
+                    <div class="prop-item">
+                        <label>W</label>
+                        <input type="text" id="prop-width">
+                    </div>
+                    <div class="prop-item">
+                        <label>H</label>
+                        <input type="text" id="prop-height">
+                    </div>
+                </div>
+
+                <div class="prop-group">
+                    <div class="prop-item">
+                        <label>X</label>
+                        <input type="text" id="prop-x">
+                    </div>
+                    <div class="prop-item">
+                        <label>Y</label>
+                        <input type="text" id="prop-y">
+                    </div>
+                </div>
+
+                <div class="prop-section">
+                    <label>Fill</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="prop-fill">
+                        <input type="text" id="prop-fill-text">
+                    </div>
+                </div>
+
+                <div class="prop-section">
+                    <label>Radius</label>
+                    <input type="text" id="prop-radius">
+                </div>
+
+                <div id="text-properties" style="display: none;">
+                    <div class="prop-section">
+                        <label>Content</label>
+                        <textarea id="prop-text-content"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
