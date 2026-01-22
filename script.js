@@ -27,6 +27,8 @@ const propY = document.querySelector('#prop-y')
 const propFill = document.querySelector('#prop-fill')
 const propFillText = document.querySelector('#prop-fill-text')
 const propRadius = document.querySelector('#prop-radius')
+const propRotation = document.querySelector('#prop-rotation')
+const propRotationRange = document.querySelector('#prop-rotation-range')
 const propTextContent = document.querySelector('#prop-text-content')
 const textPropsSection = document.querySelector('#text-properties')
 
@@ -83,10 +85,13 @@ exportHtmlBtn.onclick = function() {
         let e = elements[i]
         let style = "position:absolute; top:" + e.top + "; left:" + e.left + "; width:" + e.width + "; height:" + e.height + 
                     "; background-color:" + e.backgroundColor + "; border-radius:" + e.borderRadius + "; color:" + e.color + 
-                    "; font-size:" + e.fontSize + "; opacity:" + (e.opacity || 1) + ";"
+                    "; font-size:" + e.fontSize + "; opacity:" + (e.opacity || 1) + "; transform:" + (e.transform || 'none') + ";"
         
         if (e.backgroundImage) {
-            style += " background-image:" + e.backgroundImage + "; background-size:cover; background-position:center;"
+            // Fix: Escape double quotes in the background image url or use single quotes for the style attribute
+            // We'll replace double quotes in the url(...) with single quotes for safety in the exported HTML's style="..." attribute
+            let bg = e.backgroundImage.replace(/"/g, "'");
+            style += " background-image:" + bg + "; background-size:cover; background-position:center;"
         }
 
         if (e.type === 'text') {
@@ -394,6 +399,15 @@ function updatePropertiesPanel(el) {
     let radius = el.style.borderRadius
     propRadius.value = radius.replace('px', '') || 0
 
+    let transform = el.style.transform;
+    let rotation = 0;
+    if (transform && transform.includes('rotate')) {
+        let match = transform.match(/rotate\(([-]?\d*\.?\d+)deg\)/);
+        if (match) rotation = match[1];
+    }
+    propRotation.value = rotation;
+    propRotationRange.value = rotation;
+
     if (isText) {
         textPropsSection.style.display = 'block'
         propTextContent.value = el.innerText
@@ -410,12 +424,20 @@ function resetPropertiesPanel() {
     propFill.value = '#000000'
     propFillText.value = ''
     propRadius.value = ''
+    propRotation.value = ''
+    propRotationRange.value = 0
     textPropsSection.style.display = 'none'
 }
 
-function handlePropChange() {
+function handlePropChange(e) {
     let el = document.querySelector('.selected')
     if (!el) return
+
+    if (e && e.target === propRotationRange) {
+        propRotation.value = propRotationRange.value
+    } else if (e && e.target === propRotation) {
+        propRotationRange.value = propRotation.value
+    }
 
     el.style.width = propWidth.value + "px"
     el.style.height = propHeight.value + "px"
@@ -431,10 +453,14 @@ function handlePropChange() {
 
     let r = propRadius.value
     if (r !== '') el.style.borderRadius = r + "px"
+
+    let rot = propRotation.value
+    if (rot !== '') el.style.transform = `rotate(${rot}deg)`
+    
     saveCanvasState()
 }
 
-let inputs = [propWidth, propHeight, propX, propY, propRadius, propFillText, propTextContent]
+let inputs = [propWidth, propHeight, propX, propY, propRadius, propRotation, propRotationRange, propFillText, propTextContent]
 for (let i = 0; i < inputs.length; i++) {
     inputs[i].oninput = handlePropChange
 }
@@ -564,7 +590,8 @@ function saveCanvasState() {
             fontSize: s.style.fontSize,
             opacity: s.style.opacity || '1',
             classList: Array.from(s.classList),
-            innerText: s.innerText
+            innerText: s.innerText,
+            transform: s.style.transform
         })
     }
     localStorage.setItem('canvasElements', JSON.stringify(list))
@@ -599,6 +626,7 @@ function loadCanvasState() {
         el.style.color = data.color
         el.style.fontSize = data.fontSize
         el.style.opacity = data.opacity
+        el.style.transform = data.transform || 'none'
         
         if (data.type === 'text') el.innerText = data.innerText
         
