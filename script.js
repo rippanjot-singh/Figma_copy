@@ -39,19 +39,19 @@ if (selectedTool === 'shape') {
     text.style.backgroundColor = '#1e1e1e'
 }
 
-imageBtn.onclick = function() {
+imageBtn.onclick = function () {
     imageInput.click()
 }
 
-leftCollapseBtn.onclick = function() {
+leftCollapseBtn.onclick = function () {
     leftNav.classList.toggle('collapsed')
 }
 
-rightCollapseBtn.onclick = function() {
+rightCollapseBtn.onclick = function () {
     rightNav.classList.toggle('collapsed')
 }
 
-exportJsonBtn.onclick = function() {
+exportJsonBtn.onclick = function () {
     let savedData = localStorage.getItem('canvasElements')
     if (savedData == null) return
 
@@ -70,7 +70,7 @@ exportJsonBtn.onclick = function() {
     link.click()
 }
 
-exportHtmlBtn.onclick = function() {
+exportHtmlBtn.onclick = function () {
     let saved = localStorage.getItem('canvasElements')
     if (!saved) return
     let elements = JSON.parse(saved)
@@ -83,10 +83,10 @@ exportHtmlBtn.onclick = function() {
     let htmlContent = ""
     for (let i = 0; i < elements.length; i++) {
         let e = elements[i]
-        let style = "position:absolute; top:" + e.top + "; left:" + e.left + "; width:" + e.width + "; height:" + e.height + 
-                    "; background-color:" + e.backgroundColor + "; border-radius:" + e.borderRadius + "; color:" + e.color + 
-                    "; font-size:" + e.fontSize + "; opacity:" + (e.opacity || 1) + "; transform:" + (e.transform || 'none') + ";"
-        
+        let style = "position:absolute; top:" + e.top + "; left:" + e.left + "; width:" + e.width + "; height:" + e.height +
+            "; background-color:" + e.backgroundColor + "; border-radius:" + e.borderRadius + "; color:" + e.color +
+            "; font-size:" + e.fontSize + "; opacity:" + (e.opacity || 1) + "; transform:" + (e.transform || 'none') + ";"
+
         if (e.backgroundImage) {
             // Fix: Escape double quotes in the background image url or use single quotes for the style attribute
             // We'll replace double quotes in the url(...) with single quotes for safety in the exported HTML's style="..." attribute
@@ -110,12 +110,12 @@ exportHtmlBtn.onclick = function() {
     link.click()
 }
 
-imageInput.onchange = function(e) {
+imageInput.onchange = function (e) {
     let file = e.target.files[0]
     if (!file) return
 
     let reader = new FileReader()
-    reader.onload = function() {
+    reader.onload = function () {
         let imgDiv = document.createElement('div')
         imgDiv.style.backgroundImage = "url(" + reader.result + ")"
         imgDiv.style.backgroundSize = 'cover'
@@ -128,7 +128,7 @@ imageInput.onchange = function(e) {
         imgDiv.style.left = '500px'
         imgDiv.style.width = '300px'
         imgDiv.style.height = '300px'
-        
+
         addDots(imgDiv)
         canvas.appendChild(imgDiv)
         localStorage.setItem('imageId', imageId)
@@ -137,12 +137,12 @@ imageInput.onchange = function(e) {
     reader.readAsDataURL(file)
 }
 
-tool.onchange = function() {
+tool.onchange = function () {
     toolValue = tool.value
     localStorage.setItem('toolValue', toolValue)
 }
 
-tool.onclick = function() {
+tool.onclick = function () {
     if (tool.selectedIndex > 0) {
         text.style.backgroundColor = 'transparent'
         selectedTool = 'shape'
@@ -151,7 +151,7 @@ tool.onclick = function() {
     }
 }
 
-text.onclick = function() {
+text.onclick = function () {
     tool.style.backgroundColor = 'transparent'
     selectedTool = 'text'
     text.style.backgroundColor = '#1e1e1e'
@@ -173,7 +173,7 @@ function makeText(event) {
     p.style.fontSize = '16px'
     p.style.whiteSpace = 'nowrap'
     p.classList.add('shape')
-    
+
     addDots(p)
     canvas.appendChild(p)
     localStorage.setItem('textId', textId)
@@ -187,9 +187,9 @@ function makeText(event) {
 function addDots(parent) {
     let cornerContainer = document.createElement('div')
     cornerContainer.classList.add('corner')
-    
+
     let positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right']
-    
+
     for (let i = 0; i < 4; i++) {
         let dot = document.createElement('div')
         dot.classList.add('dots')
@@ -198,13 +198,13 @@ function addDots(parent) {
         dot.style.width = '10px'
         dot.style.height = '10px'
         dot.style.backgroundColor = 'white'
-        
+
         if (i == 0) { dot.style.top = '-5px'; dot.style.left = '-5px' }
         if (i == 1) { dot.style.top = '-5px'; dot.style.right = '-5px' }
         if (i == 2) { dot.style.bottom = '-5px'; dot.style.left = '-5px' }
         if (i == 3) { dot.style.bottom = '-5px'; dot.style.right = '-5px' }
-        
-        dot.onmousedown = function(e) {
+
+        dot.onmousedown = function (e) {
             startResizing(e, positions[i], parent)
         }
         cornerContainer.appendChild(dot)
@@ -262,7 +262,7 @@ function startResizing(e, type, el) {
     dragging = true
 }
 
-document.addEventListener('mousemove', function(e) {
+document.addEventListener('mousemove', function (e) {
     if (activeResizeElement == null) return
 
     let dx = e.clientX - startX
@@ -298,7 +298,7 @@ document.addEventListener('mousemove', function(e) {
     updatePropertiesPanel(activeResizeElement)
 })
 
-document.addEventListener('mouseup', function() {
+document.addEventListener('mouseup', function () {
     if (activeResizeElement) {
         activeResizeElement = null
         dragging = false
@@ -310,10 +310,10 @@ let activeDragElement = null
 let startMouseX, startMouseY, startElemX, startElemY
 let dragging = false
 
-canvas.onmousedown = function(e) {
+canvas.onmousedown = function (e) {
     let target = e.target.closest('.shape')
     if (!target) return
-    
+
     activeDragElement = target
     let rect = canvas.getBoundingClientRect()
     startMouseX = e.clientX - rect.left + canvas.scrollLeft
@@ -324,22 +324,22 @@ canvas.onmousedown = function(e) {
     dragging = true
 }
 
-document.addEventListener('mousemove', function(e) {
+document.addEventListener('mousemove', function (e) {
     if (!activeDragElement) return
-    
+
     let rect = canvas.getBoundingClientRect()
     let mouseX = e.clientX - rect.left + canvas.scrollLeft
     let mouseY = e.clientY - rect.top + canvas.scrollTop
-    
+
     let dx = mouseX - startMouseX
     let dy = mouseY - startMouseY
-    
+
     activeDragElement.style.left = (startElemX + dx) + "px"
     activeDragElement.style.top = (startElemY + dy) + "px"
     updatePropertiesPanel(activeDragElement)
 })
 
-document.addEventListener('mouseup', function() {
+document.addEventListener('mouseup', function () {
     if (activeDragElement) {
         activeDragElement.style.cursor = 'default'
         activeDragElement = null
@@ -348,9 +348,9 @@ document.addEventListener('mouseup', function() {
     }
 })
 
-canvas.onclick = function(e) {
+canvas.onclick = function (e) {
     if (dragging) return
-    
+
     let clickedShape = e.target.closest('.shape')
     if (clickedShape) {
         clearSelections()
@@ -359,13 +359,13 @@ canvas.onclick = function(e) {
         renderLayers()
         return
     }
-    
+
     clearSelections()
     resetPropertiesPanel()
     renderLayers()
-    
+
     if (e.target !== canvas) return
-    
+
     if (selectedTool === 'shape' && toolValue !== '') {
         makeShape(e)
     } else if (selectedTool === 'text') {
@@ -388,8 +388,12 @@ function updatePropertiesPanel(el) {
     propY.value = Math.round(parseFloat(el.style.top))
 
     let isText = (el.tagName === 'P')
-    let color = isText ? el.style.color : el.style.backgroundColor
-    
+
+    // Use getComputedStyle to get the resolved color values (returns rgb/rgba strings)
+    // allowing rgbToHex to work correctly even for named colors like 'pink' or 'white'
+    let style = window.getComputedStyle(el)
+    let color = isText ? style.color : style.backgroundColor
+
     if (color) {
         let hex = rgbToHex(color)
         propFill.value = hex
@@ -414,6 +418,14 @@ function updatePropertiesPanel(el) {
     } else {
         textPropsSection.style.display = 'none'
     }
+
+    // Hide Fill section for images (prevents transparency issues)
+    const fillSection = propFill.closest('.prop-section');
+    if (el.classList.contains('image-div')) {
+        if (fillSection) fillSection.style.display = 'none';
+    } else {
+        if (fillSection) fillSection.style.display = 'flex';
+    }
 }
 
 function resetPropertiesPanel() {
@@ -427,6 +439,9 @@ function resetPropertiesPanel() {
     propRotation.value = ''
     propRotationRange.value = 0
     textPropsSection.style.display = 'none'
+    
+    const fillSection = propFill.closest('.prop-section');
+    if (fillSection) fillSection.style.display = 'flex';
 }
 
 function handlePropChange(e) {
@@ -447,7 +462,8 @@ function handlePropChange(e) {
     if (el.tagName === 'P') {
         el.style.color = propFillText.value
         el.innerText = propTextContent.value
-    } else {
+    } else if (!el.classList.contains('image-div')) {
+        // Only update background color if NOT an image
         el.style.backgroundColor = propFillText.value
     }
 
@@ -465,7 +481,7 @@ for (let i = 0; i < inputs.length; i++) {
     inputs[i].oninput = handlePropChange
 }
 
-propFill.oninput = function(e) {
+propFill.oninput = function (e) {
     propFillText.value = e.target.value.toUpperCase()
     handlePropChange()
 }
@@ -480,7 +496,7 @@ function rgbToHex(rgb) {
     return "#" + r + g + b
 }
 
-document.onkeydown = function(e) {
+document.onkeydown = function (e) {
     if (e.target.tagName === 'INPUT') return
 
     let el = document.querySelector('.selected')
@@ -508,7 +524,7 @@ document.onkeydown = function(e) {
 function renderLayers() {
     layersContainer.innerHTML = ''
     let items = Array.from(canvas.children).filter(c => c.classList.contains('shape'))
-    
+
     for (let i = items.length - 1; i >= 0; i--) {
         let child = items[i]
         let layer = document.createElement('div')
@@ -522,12 +538,12 @@ function renderLayers() {
 
         layer.innerHTML = '<p>' + typeName + ' ' + (child.id.split('-')[1] || '') + '</p>' +
             '<div class="updown">' +
-                '<i class="ri-arrow-up-s-line btn-up"></i>' +
-                '<i class="ri-arrow-down-s-line btn-down"></i>' +
-                '<i class="ri-eye-line btn-eye"></i>' +
+            '<i class="ri-arrow-up-s-line btn-up"></i>' +
+            '<i class="ri-arrow-down-s-line btn-down"></i>' +
+            '<i class="ri-eye-line btn-eye"></i>' +
             '</div>'
 
-        layer.onclick = function(e) {
+        layer.onclick = function (e) {
             if (e.target.tagName === 'I') return
             clearSelections()
             child.classList.add('selected')
@@ -535,14 +551,14 @@ function renderLayers() {
             renderLayers()
         }
 
-        layer.querySelector('.btn-up').onclick = function() {
+        layer.querySelector('.btn-up').onclick = function () {
             if (child.nextElementSibling) {
                 canvas.insertBefore(child.nextElementSibling, child)
                 saveCanvasState()
             }
         }
 
-        layer.querySelector('.btn-down').onclick = function() {
+        layer.querySelector('.btn-down').onclick = function () {
             if (child.previousElementSibling) {
                 canvas.insertBefore(child, child.previousElementSibling)
                 saveCanvasState()
@@ -550,7 +566,7 @@ function renderLayers() {
         }
 
         let eye = layer.querySelector('.btn-eye')
-        eye.onclick = function() {
+        eye.onclick = function () {
             if (child.style.opacity === '0') {
                 child.style.opacity = '1'
                 eye.className = 'ri-eye-line btn-eye'
@@ -601,14 +617,14 @@ function saveCanvasState() {
 function loadCanvasState() {
     let saved = localStorage.getItem('canvasElements')
     if (!saved) return
-    
+
     let list = JSON.parse(saved)
     canvas.innerHTML = ''
-    
+
     for (let i = 0; i < list.length; i++) {
         let data = list[i]
         let el = (data.type === 'text') ? document.createElement('p') : document.createElement('div')
-        
+
         el.id = data.id
         for (let j = 0; j < data.classList.length; j++) {
             el.classList.add(data.classList[j])
@@ -627,9 +643,9 @@ function loadCanvasState() {
         el.style.fontSize = data.fontSize
         el.style.opacity = data.opacity
         el.style.transform = data.transform || 'none'
-        
+
         if (data.type === 'text') el.innerText = data.innerText
-        
+
         addDots(el)
         canvas.appendChild(el)
     }
